@@ -1,0 +1,37 @@
+
+Framework - Networking Project
+Smit Patel, Henry Fyfe
+2020-03-24
+
+Server : 
+string hostName
+list<int> livePorts
+
+def connect(portNumber):
+  establishes a TCP connection from client.
+
+def terminate(portNumber):
+  terminates a connection with a client. Removes port from livePorts.
+
+def forward(string message, portNum):
+  forwards a message from a client, to another client.
+
+Client : 
+int portNumber
+string hostName
+
+def connect(hostName, portNumber):
+  establishes a TCP connection between client and Server with dotnets tcp library.
+
+def sendMsg(string message):
+  sends a message to server after connection is established. Message is supplied by client user.
+
+def terminate():
+  sends a message to server that terminates connection on that end then terminates client connection.
+
+
+
+Resources : 
+https://docs.microsoft.com/en-us/dotnet/framework/network-programming/using-tcp-services
+http://pirate.shu.edu/~wachsmut/Teaching/CSAS2214/Virtual/Lectures/chat-client-server.html
+
