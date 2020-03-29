@@ -1,0 +1,11 @@
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server.deps.json
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server.runtimeconfig.json
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server.runtimeconfig.dev.json
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server.dll
+/home/umac/repos/net-chat/server/server/bin/Debug/netcoreapp3.1/server.pdb
+/home/umac/repos/net-chat/server/server/obj/Debug/netcoreapp3.1/server.csprojAssemblyReference.cache
+/home/umac/repos/net-chat/server/server/obj/Debug/netcoreapp3.1/server.AssemblyInfoInputs.cache
+/home/umac/repos/net-chat/server/server/obj/Debug/netcoreapp3.1/server.AssemblyInfo.cs
+/home/umac/repos/net-chat/server/server/obj/Debug/netcoreapp3.1/server.dll
+/home/umac/repos/net-chat/server/server/obj/Debug/netcoreapp3.1/server.pdb
