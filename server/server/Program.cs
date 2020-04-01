@@ -29,13 +29,18 @@ public class TcpTimeServer
             try
             {
                 ns.Write(byteTime, 0, byteTime.Length);
-                ns.Close();
-                client.Close();
+                // ns.Close();
+                // client.Close();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
+
+            byte[] bytes = new byte[1024];
+            int bytesRead = ns.Read(bytes, 0, bytes.Length);
+            
+            Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
         }
 
         listener.Stop();

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "/home/umac/repos/net-chat/server/server/server.csproj": {}
+    "/home/mac/repos/net-chat/server/server/server.csproj": {}
   },
   "projects": {
-    "/home/umac/repos/net-chat/server/server/server.csproj": {
+    "/home/mac/repos/net-chat/server/server/server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/umac/repos/net-chat/server/server/server.csproj",
+        "projectUniqueName": "/home/mac/repos/net-chat/server/server/server.csproj",
         "projectName": "server",
-        "projectPath": "/home/umac/repos/net-chat/server/server/server.csproj",
-        "packagesPath": "/home/umac/.nuget/packages/",
-        "outputPath": "/home/umac/repos/net-chat/server/server/obj/",
+        "projectPath": "/home/mac/repos/net-chat/server/server/server.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/home/mac/repos/net-chat/server/server/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "/usr/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "/home/umac/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.2"
