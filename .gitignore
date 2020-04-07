@@ -1,2 +1,20 @@
 *.idea
 
+
+.vscode/
+
+client/client/bin/Debug/netcoreapp2.2/client.dll
+
+*.dll
+
+*.pdb
+
+*.blob
+
+server/server/bin/Debug/netcoreapp2.2/server.runtimeconfig.dev.json
+
+*.cache
+
+server/server/obj/project.assets.json
+
+server/server/obj/
