@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using server;
 
 public class TcpTimeServer
 {
@@ -31,24 +33,30 @@ public class TcpTimeServer
 
         while (true)
         {
-            Console.Write("Waiting for connection...");
+            Console.Write("Server started");
             TcpClient client = listener.AcceptTcpClient();
             
             Console.WriteLine("Connection accepted w/ endpoint id " + client.Client.RemoteEndPoint.ToString());
+            var id = client.Client.RemoteEndPoint.ToString();
+            WaitingRoom.Add(item: new LiveClient()
+            {
+                id = id.Substring(id.LastIndexOf('.')),
+                tcpClient = client
+            });
             NetworkStream ns = client.GetStream();
             
-            byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
-
-            try
-            {
-                ns.Write(byteTime, 0, byteTime.Length);
-                // ns.Close();
-                // client.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            // byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
+            // try
+            // { 
+            //   
+            //     ns.Write(byteTime, 0, byteTime.Length);
+            //     // ns.Close();
+            //     // client.Close();
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine(e.ToString());
+            // }
 
             byte[] bytes = new byte[1024];
             int bytesRead = ns.Read(bytes, 0, bytes.Length);

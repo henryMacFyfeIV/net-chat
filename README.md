@@ -5,7 +5,7 @@ Instructions for part 3.
   1. Download microsoft dotnet core runtime 2.2
   2. Open a terminal and input commands below
       >cd net-chat/server/server &&
-      >sudo dotnet run
+      >dotnet run
   3. Keep the first terminal open and open a second terminal and input commands below
       >cd net-chat/client/client &&
       >dotnet run
