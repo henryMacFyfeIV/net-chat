@@ -9,9 +9,10 @@ Instructions for part 3.
   3. Keep the first terminal open and open a second terminal and input commands below
       >cd net-chat/client/client &&
       >dotnet run
-  4. Everytime the client is run (shown above) a tcp connection is made with the tcp server,
-     the tcp server logs these connections via their endpoint, responds with the current time,
-     then closes the connection.
+  4. Repeat step three in a new terminal. You now have two clients that can talk to 
+       each other by input commands. A msg looks like this "60680 hey client1". 
+       Other cli options are entering nothing to read messages or exit() to 
+       disconnect the client.
 
 sources: 
 https://docs.microsoft.com/en-us/dotnet/framework/network-programming/using-tcp-services
