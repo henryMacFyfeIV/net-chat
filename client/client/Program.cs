@@ -19,37 +19,52 @@ public class TcpTimeClient
                 NetworkStream ns = client.GetStream();
                 while (true) 
                 {
-                    System.Console.WriteLine("enter loop");
+                    // read from server
 
-                    // read server intro
-                    byte[] bytes = new byte[1024];
-                    int bytesRead = ns.Read(bytes, 0, bytes.Length);
-                    Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
+                    if(ns.DataAvailable)
+                    {
+                        byte[] bytes = new byte[1024];
+                        int bytesRead = ns.Read(bytes, 0, bytes.Length);
+                        Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));        
+                    }
                     
-                    System.Console.WriteLine( "Either send a msg like this: targetId youre message follows. Or type exit()");
+                    
+                    // var noNewData = true;
+                    // while (noNewData)
+                    // {
+                    //     if(ns.DataAvailable)
+                    //     {
+                    //         noNewData = false;
+                    //     }
+                    // }
+                    // byte[] bytes = new byte[1024];
+                    // int bytesRead = ns.Read(bytes, 0, bytes.Length);
+                    // Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
+                    
+                    System.Console.WriteLine( "Either send a msg like this: targetId youre message here. Just press enter to read your pending msgs. Or type exit()");
                     var clientMsg = Console.ReadLine();
-                    System.Console.WriteLine("readline");
-                    if (clientMsg.Contains("exit()"))
+                    if (clientMsg.Length > 1) 
                     {
-                        client.Close();
-                        Environment.Exit(0);
-                    }
-                    
-
-                    byte[] clientMsgByte = Encoding.ASCII.GetBytes("client2server msg");
-
-                    try
-                    {
-                        ns.Write(clientMsgByte, 0, clientMsg.Length);
-                        
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.ToString());
+                        var senderId = client.Client.LocalEndPoint.ToString();
+                        clientMsg = clientMsg + " ~signed: " + senderId.Split(':')[1];
+                        if (clientMsg.Contains("exit()"))
+                        {
+                            client.Close();
+                            Environment.Exit(0);
+                        }
+                        // send msg to client
+                        byte[] clientMsgByte = Encoding.ASCII.GetBytes(clientMsg);
+                        try
+                        {
+                            ns.Write(clientMsgByte, 0, clientMsg.Length);
+                            
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
                     }
                 }
-                // client.Close();
-
             }
             catch (Exception e)
             {

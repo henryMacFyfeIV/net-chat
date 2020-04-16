@@ -7,71 +7,93 @@ using server;
 
 public class TcpTimeServer
 {
-
     private const int portNum = 22740;
-
+    public List<LiveClient> LiveClients { get; set; }
     public static int Main(String[] args)
     {
+        Console.Write("Server started");
         var listener = new TcpListener(IPAddress.Any, portNum);
         listener.Start();
 
-        /* happy path 1:
-        *  server launches
-        *  server accepts client1 connection, adds them to a "Waiting room" collection, sends client1 a msg
-        *  server accepts client2 connection, adds them to a "Waiting room" collection, sends client1 a msg
-        *  client1 sends a "get available clients" (probably 'ls') query that returns all clients in waiting room
-        *  client1 sends a "connection request for client2"
-        *  client1, client2 create "client2client" object chat1
-        *  chat1 is added to "active chats"
-         * client1 and client2 are removed from Waiting room"
-        *  server sends a msg to client1 and client2 that they are connected to each other
-        */
-    
-        /*
-         * happy path 2: emergency reductions
-         * server launches
-         * client 1 launches 
-         * 
-         */
         var liveClients = new List<LiveClient>();
         while (true)
         {
-            Console.Write("Server started");
-            TcpClient client = listener.AcceptTcpClient();
-            
-            Console.WriteLine("Connection accepted w/ endpoint id " + client.Client.RemoteEndPoint.ToString());
-            var id = client.Client.RemoteEndPoint.ToString();
-            NetworkStream ns = client.GetStream();
-            
-            // add newly aquired connections to our liveClients
-            liveClients.Add(new LiveClient
+            //accepts new clientRequests, on timer
+            if (listener.Pending())
             {
-                Id = id,
-                NetStream = ns
-            });
-            
-            // send liveClients to our client. Send it to client(s)? 
-            var sb =  new StringBuilder();
-            foreach (var liveClient in liveClients)
-            {
-                sb.Append(liveClient.Id);
-                sb.Append(" ");
-            }
-            byte[] listOfAvailableClients = Encoding.ASCII.GetBytes("available clients: " + sb.ToString());
-            ns.Write(listOfAvailableClients, 0, listOfAvailableClients.Length);
-            
-            //read input from client(s?)
+                TcpClient client = listener.AcceptTcpClient();
 
-            byte[] bytes = new byte[1024];
-            int bytesRead = ns.Read(bytes, 0, bytes.Length);
+                var id = client.Client.RemoteEndPoint.ToString().Split(':')[1];
+                Console.WriteLine("Connection accepted w/ endpoint id " + id);
+                NetworkStream ns = client.GetStream();
             
-            Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
+                // add newly aquired connections to our liveClients
+                liveClients.Add(new LiveClient
+                {
+                    Id = id,
+                    NetStream = ns
+                });
+            
+                // send liveClients to our client. Send it to client(s)? 
+                var sb =  new StringBuilder();
+                foreach (var liveClient in liveClients)
+                {
+                    sb.Append(liveClient.Id);
+                    sb.Append(" ");
+                }
+                byte[] listOfAvailableClients = Encoding.ASCII.GetBytes("available clients: " + sb.ToString());
+                ns.Write(listOfAvailableClients, 0, listOfAvailableClients.Length);
+            }
+            
+
+            // var noNewData = true;
+            // while (noNewData)
+            // {
+            //     foreach (var liveClient in liveClients)
+            //     {
+            //         if (liveClient.NetStream.DataAvailable)
+            //         {
+            //             noNewData = false;
+            //         }
+            //     }
+            // }
+            
+            //read input from clients
+            if (liveClients.Count > 1)
+            {
+                foreach (var liveClient in liveClients)
+                {
+                    if (liveClient.NetStream.DataAvailable)
+                    {
+                        byte[] bytesFromMsg = new byte[1024];
+                        int bytesReadFromMsg = liveClient.NetStream.Read(bytesFromMsg, 0, bytesFromMsg.Length);
+                        InterpretMsg(Encoding.ASCII.GetString(bytesFromMsg, 0, bytesReadFromMsg), liveClients);
+                    }
+                }
+            }
         }
     }
 
-    public void WriteToClient(string msg, LiveClient targetClient )
+    // great place for error checking incoming msgs
+    public static void InterpretMsg(string idAndMsg, List<LiveClient> liveClients)
+    {
+        var idAndMsgTuple = idAndMsg.Split(' ', 2);
+        var id = idAndMsgTuple[0];
+        var msg = idAndMsgTuple[1];
+        
+        foreach (var liveClient in liveClients)
+        {
+            if (liveClient.Id.Contains(id))
+            {
+                WriteToClient(msg, liveClient);
+            }
+        }
+    }
+    public static void WriteToClient(string msg, LiveClient targetClient )
     {
         
+        byte[] msgBytes = Encoding.ASCII.GetBytes(msg);
+        targetClient.NetStream.Write(msgBytes, 0, msgBytes.Length);
     }
 
     public string ReadFromClient()
@@ -79,3 +101,8 @@ public class TcpTimeServer
         return "";
     }
 }
+
+/* todo:
+ * connections terminated from the tcp side arent cleared out of liveClients
+ * 
+ */
