@@ -4,7 +4,7 @@ namespace server
 {
     public class LiveClient
     {
-        public string id { get; set; }
-        public TcpClient tcpClient { get; set; }
+        public string Id { get; set; }
+        public NetworkStream NetStream { get; set; }
     }
 }

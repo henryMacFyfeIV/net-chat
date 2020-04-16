@@ -12,10 +12,7 @@ public class TcpTimeServer
 
     public static int Main(String[] args)
     {
-        bool done = false;
         var listener = new TcpListener(IPAddress.Any, portNum);
-        var WaitingRoom = new List<LiveClient>();
-
         listener.Start();
 
         /* happy path 1:
@@ -36,7 +33,7 @@ public class TcpTimeServer
          * client 1 launches 
          * 
          */
-        var liveClients = new List<string>();
+        var liveClients = new List<LiveClient>();
         while (true)
         {
             Console.Write("Server started");
@@ -46,28 +43,24 @@ public class TcpTimeServer
             var id = client.Client.RemoteEndPoint.ToString();
             NetworkStream ns = client.GetStream();
             
-            byte[] listOfAvailableClients = Encoding.ASCII.GetBytes("clientTest");
+            // add newly aquired connections to our liveClients
+            liveClients.Add(new LiveClient
+            {
+                Id = id,
+                NetStream = ns
+            });
+            
+            // send liveClients to our client. Send it to client(s)? 
+            var sb =  new StringBuilder();
+            foreach (var liveClient in liveClients)
+            {
+                sb.Append(liveClient.Id);
+                sb.Append(" ");
+            }
+            byte[] listOfAvailableClients = Encoding.ASCII.GetBytes("available clients: " + sb.ToString());
             ns.Write(listOfAvailableClients, 0, listOfAvailableClients.Length);
             
-            // WaitingRoom.Add(item: new LiveClient()
-            // {
-            //     id = id.Substring(id.LastIndexOf('.')),
-            //     tcpClient = client
-            // });
-            
-            
-            // byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
-            // try
-            // { 
-            //   
-            //     ns.Write(byteTime, 0, byteTime.Length);
-            //     // ns.Close();
-            //     // client.Close();
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine(e.ToString());
-            // }
+            //read input from client(s?)
 
             byte[] bytes = new byte[1024];
             int bytesRead = ns.Read(bytes, 0, bytes.Length);
@@ -76,9 +69,13 @@ public class TcpTimeServer
         }
     }
 
-    // public void WriteToClient(string msg, )
-    // {
-    //     
-    // }
+    public void WriteToClient(string msg, LiveClient targetClient )
+    {
+        
+    }
 
+    public string ReadFromClient()
+    {
+        return "";
+    }
 }

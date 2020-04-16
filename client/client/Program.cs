@@ -26,13 +26,13 @@ public class TcpTimeClient
                     int bytesRead = ns.Read(bytes, 0, bytes.Length);
                     Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
                     
-                    System.Console.WriteLine( "ready to read line");
+                    System.Console.WriteLine( "Either send a msg like this: targetId youre message follows. Or type exit()");
                     var clientMsg = Console.ReadLine();
                     System.Console.WriteLine("readline");
-                    if (clientMsg.Contains("exit"))
+                    if (clientMsg.Contains("exit()"))
                     {
-                        System.Console.WriteLine("fuck off time");
                         client.Close();
+                        Environment.Exit(0);
                     }
                     
 
