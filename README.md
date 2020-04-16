@@ -15,3 +15,7 @@ Instructions for part 3.
 
 sources: 
 https://docs.microsoft.com/en-us/dotnet/framework/network-programming/using-tcp-services
+
+https://docs.microsoft.com/en-us/dotnet/framework/network-programming/socket-code-examples
+
+

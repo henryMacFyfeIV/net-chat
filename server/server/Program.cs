@@ -30,7 +30,13 @@ public class TcpTimeServer
         *  server sends a msg to client1 and client2 that they are connected to each other
         */
     
-
+        /*
+         * happy path 2: emergency reductions
+         * server launches
+         * client 1 launches 
+         * 
+         */
+        var liveClients = new List<string>();
         while (true)
         {
             Console.Write("Server started");
@@ -38,12 +44,17 @@ public class TcpTimeServer
             
             Console.WriteLine("Connection accepted w/ endpoint id " + client.Client.RemoteEndPoint.ToString());
             var id = client.Client.RemoteEndPoint.ToString();
-            WaitingRoom.Add(item: new LiveClient()
-            {
-                id = id.Substring(id.LastIndexOf('.')),
-                tcpClient = client
-            });
             NetworkStream ns = client.GetStream();
+            
+            byte[] listOfAvailableClients = Encoding.ASCII.GetBytes("clientTest");
+            ns.Write(listOfAvailableClients, 0, listOfAvailableClients.Length);
+            
+            // WaitingRoom.Add(item: new LiveClient()
+            // {
+            //     id = id.Substring(id.LastIndexOf('.')),
+            //     tcpClient = client
+            // });
+            
             
             // byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
             // try
@@ -63,10 +74,11 @@ public class TcpTimeServer
             
             Console.WriteLine(Encoding.ASCII.GetString(bytes,0,bytesRead));
         }
-
-        listener.Stop();
-
-        return 0;
     }
+
+    // public void WriteToClient(string msg, )
+    // {
+    //     
+    // }
 
 }
